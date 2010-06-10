@@ -1,0 +1,26 @@
+<h1>Listing scheduled_photos</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Tags</th>
+    <th>Upload time</th>
+  </tr>
+
+<% @scheduled_photos.each do |scheduled_photo| %>
+  <tr>
+    <td><%=h scheduled_photo.title %></td>
+    <td><%=h scheduled_photo.description %></td>
+    <td><%=h scheduled_photo.tags %></td>
+    <td><%=h scheduled_photo.upload_time %></td>
+    <td><%= link_to 'Show', scheduled_photo %></td>
+    <td><%= link_to 'Edit', edit_scheduled_photo_path(scheduled_photo) %></td>
+    <td><%= link_to 'Destroy', scheduled_photo, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New scheduled_photo', new_scheduled_photo_path %>

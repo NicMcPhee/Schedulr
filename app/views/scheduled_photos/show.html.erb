@@ -1,0 +1,23 @@
+<p>
+  <b>Title:</b>
+  <%=h @scheduled_photo.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @scheduled_photo.description %>
+</p>
+
+<p>
+  <b>Tags:</b>
+  <%=h @scheduled_photo.tags %>
+</p>
+
+<p>
+  <b>Upload time:</b>
+  <%=h @scheduled_photo.upload_time %>
+</p>
+
+
+<%= link_to 'Edit', edit_scheduled_photo_path(@scheduled_photo) %> |
+<%= link_to 'Back', scheduled_photos_path %>

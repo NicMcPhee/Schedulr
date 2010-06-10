@@ -1,0 +1,27 @@
+<h1>New scheduled_photo</h1>
+
+<% form_for(@scheduled_photo) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_area :description %>
+  </p>
+  <p>
+    <%= f.label :tags %><br />
+    <%= f.text_area :tags %>
+  </p>
+  <p>
+    <%= f.label :upload_time %><br />
+    <%= f.datetime_select :upload_time %>
+  </p>
+  <p>
+    <%= f.submit 'Create' %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', scheduled_photos_path %>
