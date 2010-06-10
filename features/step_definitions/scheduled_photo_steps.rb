@@ -12,8 +12,6 @@ When /^I delete the (\d+)(?:st|nd|rd|th) scheduled_photo$/ do |pos|
 end
 
 Then /^I should see the following scheduled_photos:$/ do |expected_scheduled_photos_table|
-  # TODO Clean out the commented out print statements
-  # pp tableish('table tr', 'td,th')
   expected_scheduled_photos_table.diff!(tableish('table tr', 'td,th'))
 end
 
