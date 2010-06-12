@@ -1,10 +1,10 @@
 class ScheduledPhoto < ActiveRecord::Base
   before_create :compute_upload_time
 
-  include ScheduledPhotosHelper
-
   protected
   
+  include ScheduledPhotosHelper
+
   def compute_upload_time
     # TODO Clean out the commented out print statements
     #pp "Setting upload time to " + Time.now.to_s
