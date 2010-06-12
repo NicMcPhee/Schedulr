@@ -32,4 +32,16 @@ Feature: Manage scheduled_photos
     When I schedule the following photo:
       |title|description|tags|
       |My photo|A photo I took|this, that|
-    Then the scheduled upload time for "My photo" should be now
+    Then the scheduled upload time for "My photo" should be the maximum delay
+
+  @wip
+  Scenario: Schedule my first three photos
+    Given that I've never scheduled or posted a photo
+    When I schedule the following photos:
+      |title|description|tags|
+      |First photo|The first photo I took|this, that|
+      |Second photo|The second photo I took|this, that, the other|
+      |Third photo|The third photo I took|this, that, some stuff|
+    Then the scheduled upload time for "First photo" should be now
+    And the scheduled upload time for "Second photo" should be in 3.5 days
+    And the scheduled upload time for "Third photo" should be in 7 days

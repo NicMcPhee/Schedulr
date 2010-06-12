@@ -1,3 +1,5 @@
+include ScheduledPhotosHelper
+
 ACCEPTABLE_TIME_GAP = 60 # seconds, or a minute
 
 Given /^the following scheduled_photos:$/ do |scheduled_photos|
@@ -25,7 +27,16 @@ When /^I schedule the following photo:$/ do |table|
   end
 end
 
-Then /^the scheduled upload time for "([^\"]*)" should be now$/ do |photo_title|
+def check_upload_time(offset_time, photo_title)
   photo = ScheduledPhoto.find_by_title(photo_title)
-  photo.upload_time.should be_close(Time.now, ACCEPTABLE_TIME_GAP)
+  photo.upload_time.should be_close(Time.now + offset_time, ACCEPTABLE_TIME_GAP)
+end
+
+Then /^the scheduled upload time for "([^\"]*)" should be the maximum delay$/ do |photo_title|
+  check_upload_time(MAXIMUM_UPLOAD_DELAY, photo_title)
+end
+
+Then /^the scheduled upload time for "([^\"]*)" should be in (\d*\.?\d+) days/ do |photo_title, offset_days|
+  offset_time = offset_days.to_f.days
+  check_upload_time(offset_time, photo_title)
 end
