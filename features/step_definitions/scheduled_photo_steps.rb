@@ -21,7 +21,7 @@ Given /^that I've never scheduled or posted a photo$/ do
   ScheduledPhoto.delete_all
 end
 
-When /^I schedule the following photo:$/ do |table|
+When /^I schedule the following photos?:$/ do |table|
   table.hashes.each do |hash|
     ScheduledPhoto.create!(hash)
   end
@@ -34,6 +34,10 @@ end
 
 Then /^the scheduled upload time for "([^\"]*)" should be the maximum delay$/ do |photo_title|
   check_upload_time(MAXIMUM_UPLOAD_DELAY, photo_title)
+end
+
+Then /^the scheduled upload time for "([^\"]*)" should be now$/ do |photo_title|
+  check_upload_time(0.days, photo_title)
 end
 
 Then /^the scheduled upload time for "([^\"]*)" should be in (\d*\.?\d+) days/ do |photo_title, offset_days|
