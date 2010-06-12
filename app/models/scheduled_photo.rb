@@ -1,5 +1,5 @@
 class ScheduledPhoto < ActiveRecord::Base
-  before_save :compute_upload_time
+  before_create :compute_upload_time
 
   include ScheduledPhotosHelper
 
