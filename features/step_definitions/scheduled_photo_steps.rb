@@ -27,6 +27,10 @@ When /^I schedule the following photos?:$/ do |table|
   end
 end
 
+Then /^there should be (\d+) scheduled photos$/ do |photo_count|
+  ScheduledPhoto.count.should == photo_count.to_i
+end
+
 def check_upload_time(offset_time, photo_title)
   photo = ScheduledPhoto.find_by_title(photo_title)
   photo.upload_time.should be_close(Time.now + offset_time, ACCEPTABLE_TIME_GAP)
@@ -36,11 +40,7 @@ Then /^the scheduled upload time for "([^\"]*)" should be the maximum delay$/ do
   check_upload_time(MAXIMUM_UPLOAD_DELAY, photo_title)
 end
 
-Then /^the scheduled upload time for "([^\"]*)" should be now$/ do |photo_title|
-  check_upload_time(0.days, photo_title)
-end
-
-Then /^the scheduled upload time for "([^\"]*)" should be in (\d*\.?\d+) days/ do |photo_title, offset_days|
-  offset_time = offset_days.to_f.days
+Then /^the scheduled upload time for "([^\"]*)" should be in (\d*\.\d+) times the maximum delay$/ do |photo_title, proportion|
+  offset_time = proportion.to_f * MAXIMUM_UPLOAD_DELAY
   check_upload_time(offset_time, photo_title)
 end

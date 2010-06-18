@@ -15,17 +15,17 @@ Feature: Manage scheduled_photos
 
   Scenario: Delete scheduled_photo
     Given the following scheduled_photos:
-      |title|description|tags|upload_time|
-      |title 1|description 1|tags 1|1 Jan 2010 3:15am|
-      |title 2|description 2|tags 2|5 Feb 2010 15:15|
-      |title 3|description 3|tags 3|25 June 2010 noon|
-      |title 4|description 4|tags 4|25 June 2011 2pm|
+      |title|description|tags|
+      |title 1|description 1|tags 1|
+      |title 2|description 2|tags 2|
+      |title 3|description 3|tags 3|
+      |title 4|description 4|tags 4|
     When I delete the 3rd scheduled_photo
     Then I should see the following scheduled_photos:
-      |Title|Description|Tags|Upload time|
-      |title 1|description 1|tags 1|2010-01-01 03:15|
-      |title 2|description 2|tags 2|2010-02-05 15:15|
-      |title 4|description 4|tags 4|2011-06-25 14:00|
+      |Title|Description|Tags|
+      |title 1|description 1|tags 1|
+      |title 2|description 2|tags 2|
+      |title 4|description 4|tags 4|
 
   Scenario: Schedule my first photo
     Given that I've never scheduled or posted a photo
@@ -34,14 +34,16 @@ Feature: Manage scheduled_photos
       |My photo|A photo I took|this, that|
     Then the scheduled upload time for "My photo" should be the maximum delay
 
-  @wip
-  Scenario: Schedule my first three photos
+  Scenario: Schedule my first four photos
     Given that I've never scheduled or posted a photo
     When I schedule the following photos:
       |title|description|tags|
       |First photo|The first photo I took|this, that|
       |Second photo|The second photo I took|this, that, the other|
       |Third photo|The third photo I took|this, that, some stuff|
-    Then the scheduled upload time for "First photo" should be now
-    And the scheduled upload time for "Second photo" should be in 3.5 days
-    And the scheduled upload time for "Third photo" should be in 7 days
+      |Fourth photo|The fourth photo I took|a_tag|
+    Then there should be 4 scheduled photos
+    And the scheduled upload time for "First photo" should be in 0.25 times the maximum delay
+    And the scheduled upload time for "Second photo" should be in 0.5 times the maximum delay
+    And the scheduled upload time for "Third photo" should be in 0.75 times the maximum delay
+    And the scheduled upload time for "Fourth photo" should be the maximum delay
