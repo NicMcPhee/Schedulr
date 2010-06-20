@@ -17,4 +17,11 @@ config.action_controller.perform_caching             = false
 config.action_mailer.raise_delivery_errors = false
 
 # Start up instances of Workling and Starling
-Workling::Remote.dispatcher = Workling::Remote::Runners::StarlingRunner.new
+# I had to wrap it in the after_initialize call, or trying to run
+# things like script/generate threw exceptions that they couldn't
+# find MemCache. None of the stuff I read explained _why_ that was
+# necessary, but it did appear to work.
+# http://www.ruby-forum.com/topic/182018
+config.after_initialize do
+  Workling::Remote.dispatcher = Workling::Remote::Runners::StarlingRunner.new
+end
