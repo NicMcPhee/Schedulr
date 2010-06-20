@@ -16,6 +16,9 @@ module NavigationHelpers
     when /the new scheduled_photo page/
       new_scheduled_photo_path
 
+    when /upload as needed/
+      upload_as_needed_path
+
 
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:

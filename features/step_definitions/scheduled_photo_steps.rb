@@ -27,13 +27,14 @@ When /^I schedule the following photos?:$/ do |table|
   end
 end
 
-Then /^there should be (\d+) scheduled photos$/ do |photo_count|
-  ScheduledPhoto.count.should == photo_count.to_i
+Then /^there should be (\d+) scheduled photos$/ do |num_scheduled_photos|
+  ScheduledPhoto.scheduled_photos.size.should == num_scheduled_photos.to_i
 end
 
 def check_upload_time(offset_time, photo_title)
   photo = ScheduledPhoto.find_by_title(photo_title)
   photo.upload_time.should be_close(Time.now + offset_time, ACCEPTABLE_TIME_GAP)
+  photo.is_uploaded.should be_false
 end
 
 Then /^the scheduled upload time for "([^\"]*)" should be the maximum delay$/ do |photo_title|
@@ -43,4 +44,18 @@ end
 Then /^the scheduled upload time for "([^\"]*)" should be in (\d*\.\d+) times the maximum delay$/ do |photo_title, proportion|
   offset_time = proportion.to_f * MAXIMUM_UPLOAD_DELAY
   check_upload_time(offset_time, photo_title)
+end
+
+When /^wait the maximum delay$/ do
+  Timecop.travel(MAXIMUM_UPLOAD_DELAY)
+end
+
+Then /^there should be (\d+) uploaded photos$/ do |num_uploaded_photos|
+  ScheduledPhoto.uploaded_photos.size.should == num_uploaded_photos.to_i
+end
+
+Then /^"([^\"]*)" should be uploaded$/ do |photo_title|
+  ScheduledPhoto.find_by_title(photo_title).is_uploaded.should be_true
+  # TODO And Flickr should have received the photo!
+  pending
 end

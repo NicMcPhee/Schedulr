@@ -80,4 +80,12 @@ class ScheduledPhotosController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  # GET /upload_as_needed
+  # I have a feeling that we may be responding to POST and other things here
+  # TODO I should check that out
+  def upload_as_needed
+    ScheduledPhoto.upload_as_needed
+    redirect_to scheduled_photos_path
+  end
 end

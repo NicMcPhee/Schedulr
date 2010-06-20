@@ -33,6 +33,8 @@ Feature: Manage scheduled_photos
       |title|description|tags|
       |My photo|A photo I took|this, that|
     Then the scheduled upload time for "My photo" should be the maximum delay
+    And there should be 1 scheduled photos
+    And there should be 0 uploaded photos
 
   Scenario: Schedule my first four photos
     Given that I've never scheduled or posted a photo
@@ -43,7 +45,35 @@ Feature: Manage scheduled_photos
       |Third photo|The third photo I took|this, that, some stuff|
       |Fourth photo|The fourth photo I took|a_tag|
     Then there should be 4 scheduled photos
+    And there should be 0 uploaded photos
     And the scheduled upload time for "First photo" should be in 0.25 times the maximum delay
     And the scheduled upload time for "Second photo" should be in 0.5 times the maximum delay
     And the scheduled upload time for "Third photo" should be in 0.75 times the maximum delay
     And the scheduled upload time for "Fourth photo" should be the maximum delay
+
+  Scenario: Schedule and upload my first photo
+    Given that I've never scheduled or posted a photo
+    When I schedule the following photo:
+      |title|description|tags|
+      |My photo|A photo I took|this, that|
+    And wait the maximum delay
+    And I am on upload as needed
+    Then there should be 0 scheduled photos
+    And there should be 1 uploaded photos
+    And "My photo" should be uploaded
+
+  @wip
+  Scenario: Schedule and upload several photos
+    Given that I've never scheduled or posted a photo
+    When I schedule the following photo:
+      |title|description|tags|
+      |First photo|The first photo I took|this, that|
+      |Second photo|The second photo I took|this, that, the other|
+      |Third photo|The third photo I took|this, that, some stuff|
+      |Fourth photo|The fourth photo I took|a_tag|
+    And wait 0.6 times the maximum delay
+    And I am on upload as needed
+    Then there should be 2 scheduled photos
+    And there should be 2 uploaded photos
+    And "First photo" should be uploaded
+    And "Second photo" should be uploaded

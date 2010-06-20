@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :scheduled_photos
+  map.upload_as_needed 'upload_as_needed', :controller => "scheduled_photos", :action => "upload_as_needed"
 
   # The priority is based upon order of creation: first created -> highest priority.
 
