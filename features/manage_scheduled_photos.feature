@@ -53,16 +53,16 @@ Feature: Manage scheduled_photos
 
   Scenario: Schedule and upload my first photo
     Given that I've never scheduled or posted a photo
+    And I've connected to Flickr
     When I schedule the following photo:
       |title|description|tags|
       |My photo|A photo I took|this, that|
     And wait the maximum delay
-    And I am on upload as needed
+    And I visit the upload page
     Then there should be 0 scheduled photos
     And there should be 1 uploaded photos
     And "My photo" should be uploaded
 
-  @wip
   Scenario: Schedule and upload several photos
     Given that I've never scheduled or posted a photo
     When I schedule the following photo:
@@ -72,7 +72,7 @@ Feature: Manage scheduled_photos
       |Third photo|The third photo I took|this, that, some stuff|
       |Fourth photo|The fourth photo I took|a_tag|
     And wait 0.6 times the maximum delay
-    And I am on upload as needed
+    And I visit the upload page
     Then there should be 2 scheduled photos
     And there should be 2 uploaded photos
     And "First photo" should be uploaded

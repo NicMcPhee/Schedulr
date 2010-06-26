@@ -11,6 +11,10 @@ class ScheduledPhoto < ActiveRecord::Base
 
   def upload
     # TODO upload to Flickr!
+    # Turn this puts into some sort of log message.
+    # puts "About to upload:"
+    # pp self
+    flickr.upload_photo path, :title => title, :description => description
     # I don't know why I need self in front of is_uploaded. It seems
     # that I should be able to just refer to is_uploaded as a field
     # and it would work, but that doesn't seem to be happening :-(.
@@ -18,14 +22,22 @@ class ScheduledPhoto < ActiveRecord::Base
     save!
   end
 
+  def self.due_for_upload
+    # puts "Scheduled photos in due_for_upload"
+    # pp scheduled_photos
+    ready = scheduled_photos.select do |photo|
+      photo.upload_time <= Time.now
+    end
+    # puts "Ready for upload"
+    # pp ready
+    return ready
+  end
+
   protected
 
   def self.upload_as_needed
-    # TODO I bet I can do this with filter or some such
-    due_for_upload = scheduled_photos.select do |photo|
-      photo.upload_time <= Time.now
-    end
-    due_for_upload.each { |photo| photo.upload }
+    due = due_for_upload
+    due.each { |photo| photo.upload }
   end
 
   include ScheduledPhotosHelper

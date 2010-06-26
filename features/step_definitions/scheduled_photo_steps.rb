@@ -27,6 +27,24 @@ When /^I schedule the following photos?:$/ do |table|
   end
 end
 
+When /^wait the maximum delay$/ do
+  Timecop.travel(MAXIMUM_UPLOAD_DELAY)
+end
+
+When /^wait (\d*\.\d+) times the maximum delay$/ do |proportion|
+  Timecop.travel((proportion.to_f * MAXIMUM_UPLOAD_DELAY).to_i)
+end
+
+When /^I visit the upload page$/ do
+  to_upload = ScheduledPhoto.due_for_upload
+  to_upload.each do |photo|
+    # puts "Marking #{photo.title} should be uploaded"
+    flickr.should_receive(:upload_photo).with(photo.path, :title => photo.title, :description => photo.description)
+  end
+  # puts "***\n*** Done visiting the upload page"
+  visit path_to('upload as needed')
+end
+
 Then /^there should be (\d+) scheduled photos$/ do |num_scheduled_photos|
   ScheduledPhoto.scheduled_photos.size.should == num_scheduled_photos.to_i
 end
@@ -46,16 +64,15 @@ Then /^the scheduled upload time for "([^\"]*)" should be in (\d*\.\d+) times th
   check_upload_time(offset_time, photo_title)
 end
 
-When /^wait the maximum delay$/ do
-  Timecop.travel(MAXIMUM_UPLOAD_DELAY)
-end
-
 Then /^there should be (\d+) uploaded photos$/ do |num_uploaded_photos|
   ScheduledPhoto.uploaded_photos.size.should == num_uploaded_photos.to_i
 end
 
 Then /^"([^\"]*)" should be uploaded$/ do |photo_title|
-  ScheduledPhoto.find_by_title(photo_title).is_uploaded.should be_true
+  photo = ScheduledPhoto.find_by_title(photo_title)
+  photo.is_uploaded.should be_true
   # TODO And Flickr should have received the photo!
-  pending
+  # pending
+  flickr.rspec_verify
+  flickr.rspec_reset
 end

@@ -7,6 +7,8 @@
 ENV["RAILS_ENV"] ||= "cucumber"
 require File.expand_path(File.dirname(__FILE__) + '/../../config/environment')
 
+require 'spec/stubs/cucumber'
+
 require 'cucumber/formatter/unicode' # Remove this line if you don't want Cucumber Unicode support
 require 'cucumber/rails/rspec'
 require 'cucumber/rails/world'
@@ -56,4 +58,24 @@ if defined?(ActiveRecord::Base)
     DatabaseCleaner.strategy = :truncation
   rescue LoadError => ignore_if_database_cleaner_not_present
   end
+end
+
+require 'spec/mocks/framework'
+require 'spec/mocks/extensions'
+require 'spec/adapters/mock_frameworks/rspec'
+
+World(Spec::Mocks::ExampleMethods)
+
+include Spec::Adapters::MockFramework
+
+Before do
+  setup_mocks_for_rspec
+  # $rspec_stubs ||= Spec::Mocks::Space.new
+end
+
+After do
+  verify_mocks_for_rspec
+  teardown_mocks_for_rspec
+#  $rspec_stubs.verify_all
+#  $rspec_stubs.reset_all
 end
