@@ -16,6 +16,7 @@ require 'cucumber/rails/active_record'
 require 'cucumber/web/tableish'
 
 require 'timecop'
+require 'flickraw'
 
 require 'webrat'
 require 'webrat/core/matchers'
